@@ -1,0 +1,21 @@
+{
+  "name": "aprendiztechbot",
+  "version": "1.0.0",
+  "description": "O AprendizTech nasceu da vontade de aprofundar os conhecimentos em TypeScript de uma maneira divertida e interativa. Além disso, o bot é uma brincadeira amigável com o grupo [de tecnologia](https://t.me/ProgramadoresBrasil).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "node-telegram-bot-api": "^0.64.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.64.2"
+  }
+}
