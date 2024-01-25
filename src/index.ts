@@ -21,52 +21,59 @@ let contagem = 0; // Variável para armazenar a contagem
 console.log('Bot inicializado com sucesso.');
 
 bot.on('message', (msg) => {
-  const chatId = msg.chat.id;
-  const message = msg.text || '';
+    const chatId = msg.chat.id;
+    const message = msg.text || '';
+    let userAllowed: boolean = true;
+  
+    // Verificar se o remetente da mensagem está na lista de IDs permitidos
+    if (msg.from && allowedUsers.length > 0 && !allowedUsers.includes(msg.from.id.toString())) {
+      userAllowed = false;
+    }
+  
+    const commandArray = message.split(' '); // Divide a mensagem em um array de palavras
+    const command = commandArray[0].toLowerCase(); // Obtém o primeiro elemento do array (o comando)
+    const incidencia = commandArray.slice(1).join(' '); // Junta as palavras após o comando
 
-  // Verificar se o remetente da mensagem está na lista de IDs permitidos
-  if (msg.from && allowedUsers.length > 0 && !allowedUsers.includes(msg.from.id.toString())) {
-    console.log('Usuário não autorizado. Ignorando mensagem.');
-    return;
-  }
-
-  const commandArray = message.split(' '); // Divide a mensagem em um array de palavras
-  const command = commandArray[0].toLowerCase(); // Obtém o primeiro elemento do array (o comando)
-  const incidencia = commandArray.slice(1).join(' '); // Junta as palavras após o comando
-
-  switch (command) {
+    switch (command) {
     case '/start':
-      bot.sendMessage(chatId, 'Bem-vindo! Este é um <b>bot</b> simples para o Telegram.', { parse_mode: 'HTML' });
-      break;
+        bot.sendMessage(chatId, 'Bem-vindo! Este é um <b>bot</b> simples para o Telegram.', { parse_mode: 'HTML' });
+        break;
 
     case '/sucesso':
-      contagem++;
-      bot.sendMessage(chatId, `Contagem atual: <b>${contagem}</b>`, { parse_mode: 'HTML' });
-      break;
+        if (userAllowed) {
+        contagem++;
+        bot.sendMessage(chatId, `Contagem atual: <b>${contagem}</b>`, { parse_mode: 'HTML' });
+        }
+        break;
 
     case '/incidencia':
-      contagem = 0; // Zera a contagem ao ocorrer uma incidência
-      bot.sendMessage(chatId, `Infelizmente tivemos uma incidência de <b>${incidencia}</b> e a contagem foi <b>zerada</b>.`, { parse_mode: 'HTML' });
-      break;
+        if (userAllowed) {
+        contagem = 0; // Zera a contagem ao ocorrer uma incidência
+        bot.sendMessage(chatId, `Infelizmente tivemos uma incidência de <b>${incidencia}</b> e a contagem foi <b>zerada</b>.`, { parse_mode: 'HTML' });
+        }
+        break;
 
     case '/contagem':
-      bot.sendMessage(chatId, `Estamos a <b>${contagem}</b> dia(s) sem pedidos de bots de Cassinos, ask-to-ask, hackaer facebook, contribua com essa contagem.`, { parse_mode: 'HTML' });
-      break;
+        if (userAllowed) {
+        bot.sendMessage(chatId, `Estamos a <b>${contagem}</b> dia(s) sem pedidos de bots de Cassinos, ask-to-ask, hackaer facebook, contribua com essa contagem.`, { parse_mode: 'HTML' });
+        }
+        break;
 
     case '/myid':
-      const myIdMessage = msg.from ? `Seu ID de usuário é <b>${msg.from.id}</b>` : 'Não foi possível obter o ID de usuário.';
-      bot.sendMessage(chatId, myIdMessage, { parse_mode: 'HTML' });
-      break;
+        const myIdMessage = msg.from ? `Seu ID de usuário é <b>${msg.from.id}</b>` : 'Não foi possível obter o ID de usuário.';
+        bot.sendMessage(chatId, myIdMessage, { parse_mode: 'HTML' });
+        break;
 
     case '/idgrupo':
-      const groupIdMessage = `O ID deste grupo é <b>${chatId}</b>`;
-      bot.sendMessage(chatId, groupIdMessage, { parse_mode: 'HTML' });
-      break;
+        const groupIdMessage = `O ID deste grupo é <b>${chatId}</b>`;
+        bot.sendMessage(chatId, groupIdMessage, { parse_mode: 'HTML' });
+        break;
 
     default:
-      bot.sendMessage(chatId, 'Desculpe, não entendi essa mensagem.');
-  }
-});
+        bot.sendMessage(chatId, 'Desculpe, não entendi essa mensagem.');
+    }
+  });
+  
 
 // Manipulador de eventos para o sinal de interrupção (Ctrl + C)
 process.on('SIGINT', () => {
